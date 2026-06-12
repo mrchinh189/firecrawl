@@ -1,0 +1,66 @@
+{
+  "description": "Cau hinh nguon gia resin nhua nguyen sinh PP/PE (gia quoc te / chi so). Doi 'enabled' va 'url' theo nhu cau. Schema trich xuat dung chung o ben duoi.",
+  "scrape": {
+    "onlyMainContent": true,
+    "timeoutMs": 60000,
+    "maxAgeMs": 3600000
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "prices": {
+        "type": "array",
+        "description": "Danh sach cac dong gia resin tim thay tren trang.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "material": {
+              "type": "string",
+              "enum": ["PP", "PE", "HDPE", "LDPE", "LLDPE", "Other"],
+              "description": "Loai nhua nguyen sinh"
+            },
+            "grade": { "type": "string", "description": "Ma grade/loai (vd: homopolymer, injection, film...)" },
+            "price": { "type": "number", "description": "Gia tri so cua gia" },
+            "currency": { "type": "string", "description": "Don vi tien te (USD, EUR, CNY, VND...)" },
+            "unit": { "type": "string", "description": "Don vi tinh (vd: USD/ton, USD/lb, USD/kg)" },
+            "region": { "type": "string", "description": "Khu vuc/thi truong (vd: US, Europe, China, Southeast Asia)" },
+            "date": { "type": "string", "description": "Ngay/ky cua gia neu co (YYYY-MM-DD hoac mo ta)" },
+            "change": { "type": "string", "description": "Bien dong so voi ky truoc neu co (vd: +2%, -50 USD)" }
+          },
+          "required": ["material", "price"]
+        }
+      }
+    },
+    "required": ["prices"]
+  },
+  "sources": [
+    {
+      "name": "businessanalytiq-polypropylene",
+      "material": "PP",
+      "enabled": true,
+      "url": "https://businessanalytiq.com/procurementanalytics/index/polypropylene-price-index/",
+      "prompt": "Trich xuat tat ca gia polypropylene (PP) hien tai va theo khu vuc tren trang nay, gom gia tri so, don vi tien te, don vi tinh, khu vuc va ngay/ky neu co."
+    },
+    {
+      "name": "businessanalytiq-polyethylene",
+      "material": "PE",
+      "enabled": true,
+      "url": "https://businessanalytiq.com/procurementanalytics/index/polyethylene-price-index/",
+      "prompt": "Trich xuat tat ca gia polyethylene (PE/HDPE/LDPE/LLDPE) hien tai va theo khu vuc tren trang nay, gom gia tri so, don vi tien te, don vi tinh, khu vuc va ngay/ky neu co."
+    },
+    {
+      "name": "chemanalyst-polypropylene",
+      "material": "PP",
+      "enabled": false,
+      "url": "https://www.chemanalyst.com/Pricing-data/polypropylene-1090",
+      "prompt": "Trich xuat bang gia polypropylene (PP) theo khu vuc tren trang, gom gia, don vi tien te, don vi tinh, khu vuc, ngay/ky."
+    },
+    {
+      "name": "chemanalyst-polyethylene",
+      "material": "PE",
+      "enabled": false,
+      "url": "https://www.chemanalyst.com/Pricing-data/polyethylene-ldpe-50",
+      "prompt": "Trich xuat bang gia polyethylene (PE/LDPE/HDPE/LLDPE) theo khu vuc tren trang, gom gia, don vi tien te, don vi tinh, khu vuc, ngay/ky."
+    }
+  ]
+}

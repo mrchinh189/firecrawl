@@ -1,0 +1,13 @@
+{
+  "name": "plastic-resin-price-scraper",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cao gia nguyen vat lieu nhua nguyen sinh PP/PE bang Firecrawl",
+  "scripts": {
+    "start": "node scrapeResinPrices.mjs"
+  },
+  "dependencies": {
+    "@mendable/firecrawl-js": "^4.0.0"
+  }
+}

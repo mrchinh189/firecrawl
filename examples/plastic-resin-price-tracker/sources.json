@@ -1,0 +1,61 @@
+{
+  "scrape": {
+    "onlyMainContent": true,
+    "timeoutMs": 60000,
+    "maxAgeMs": 3600000
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "prices": {
+        "type": "array",
+        "description": "Danh sach cac dong gia resin tim thay tren trang.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "material": { "type": "string", "enum": ["PP", "PE", "HDPE", "LDPE", "LLDPE", "Other"] },
+            "grade": { "type": "string" },
+            "price": { "type": "number" },
+            "currency": { "type": "string" },
+            "unit": { "type": "string", "description": "vd: USD/ton, USD/lb, USD/kg, EUR/ton" },
+            "region": { "type": "string" },
+            "date": { "type": "string", "description": "YYYY-MM-DD hoac mo ta ky" },
+            "change": { "type": "string" }
+          },
+          "required": ["material", "price"]
+        }
+      }
+    },
+    "required": ["prices"]
+  },
+  "sources": [
+    {
+      "name": "businessanalytiq-polypropylene",
+      "material": "PP",
+      "enabled": true,
+      "url": "https://businessanalytiq.com/procurementanalytics/index/polypropylene-price-index/",
+      "prompt": "Trich xuat tat ca gia polypropylene (PP) hien tai va theo khu vuc (US, Europe, China, Asia...) tren trang, gom gia tri so, don vi tien te, don vi tinh, khu vuc, ngay/ky neu co."
+    },
+    {
+      "name": "businessanalytiq-polyethylene",
+      "material": "PE",
+      "enabled": true,
+      "url": "https://businessanalytiq.com/procurementanalytics/index/polyethylene-price-index/",
+      "prompt": "Trich xuat tat ca gia polyethylene (PE/HDPE/LDPE/LLDPE) hien tai va theo khu vuc tren trang, gom gia tri so, don vi tien te, don vi tinh, khu vuc, ngay/ky neu co."
+    },
+    {
+      "name": "businessanalytiq-hdpe",
+      "material": "HDPE",
+      "enabled": true,
+      "url": "https://businessanalytiq.com/procurementanalytics/index/hdpe-price-index/",
+      "prompt": "Trich xuat gia HDPE hien tai va theo khu vuc tren trang, gom gia tri so, don vi tien te, don vi tinh, khu vuc, ngay/ky."
+    },
+    {
+      "name": "businessanalytiq-ldpe",
+      "material": "LDPE",
+      "enabled": true,
+      "url": "https://businessanalytiq.com/procurementanalytics/index/ldpe-price-index/",
+      "prompt": "Trich xuat gia LDPE hien tai va theo khu vuc tren trang, gom gia tri so, don vi tien te, don vi tinh, khu vuc, ngay/ky."
+    }
+  ]
+}
