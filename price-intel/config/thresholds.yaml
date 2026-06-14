@@ -1,0 +1,12 @@
+# Ngưỡng quyết định cho alerts/rules.py & forecast. CHỈNH tại đây, KHÔNG sửa code.
+forecast:
+  horizon: 6                  # số tuần dự báo
+alert:
+  action_buy:
+    forecast_up_pct: 0.05     # dự báo tăng >5% -> tín hiệu MUA
+  divergence:
+    additive_up_pct: 0.05     # phụ gia tăng >5% trong khi resin giảm -> PHÂN KỲ
+    resin_down: true
+  naphtha_ethylene_floor: 250 # USD/tấn — spread mỏng kéo dài -> resin tạo đáy
+qc:
+  jump_pct: 0.10              # nhảy >10% giữa 2 mốc -> flag review (KHÔNG xóa)

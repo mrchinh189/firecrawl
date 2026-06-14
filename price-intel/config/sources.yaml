@@ -1,0 +1,37 @@
+# Catalog nguồn thu thập. collector ưu tiên FIRECRAWL trước (theo yêu cầu),
+# fallback BS4/requests. Nguồn paywall (ICIS/Platts/Argus/ChemOrbis) KHÔNG cào.
+fetch:
+  prefer: firecrawl            # firecrawl | http  (ưu tiên Firecrawl trước)
+  delay_sec: 4                 # delay lịch sự giữa request
+  retry: 1
+
+# Tầng FREE (API/XML — không cần Firecrawl)
+free:
+  - {name: "EIA RBRTE", kind: api, dataset: brent, freq: daily}
+  - {name: "Vietcombank", kind: xml, dataset: usdvnd, freq: daily}
+  - {name: "UN Comtrade", kind: api, dataset: unit_value_hs390102, freq: monthly}
+
+# Tầng FIRECRAWL (HTML -> markdown -> AI extract). prefer=firecrawl ở trên.
+firecrawl:
+  - {name: "ThePlasticsExchange", url: "https://www.theplasticsexchange.com/", product: [pp, pe], freq: weekly}
+  - {name: "DCE delayed", url: "https://www.dce.com.cn/DCE/Market/marketdata/index.html", product: [pp], freq: daily}
+  - {name: "Polymerupdate-free", url: "https://www.polymerupdate.com/", product: [pp, pe, ps], freq: weekly}
+  - {name: "businessanalytiq", url: "https://www.businessanalytiq.com/procurementanalytics/index/", product: [tio2, stearic, pe_wax], freq: monthly}
+  - {name: "MPOB", url: "https://bepi.mpob.gov.my/index.php/en/", product: [stearic], freq: weekly}
+
+# Nguồn tin tức (chỉ tiêu đề + tóm tắt + link — KHÔNG full-text)
+news:
+  - {name: "Polymerupdate-free", url: "https://www.polymerupdate.com/", category: resin}
+  - {name: "businessanalytiq", url: "https://www.businessanalytiq.com/procurementanalytics/index/", category: additive}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=polypropylene+price", category: resin}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=TiO2+price", category: additive}
+
+# Nguồn backfill lịch sử (3–5 năm) cho forecast tin cậy hơn
+history:
+  - {name: "EIA RBRTE", kind: api, series: brent_daily}
+  - {name: "FRED", kind: api, series: [PCU325211325211, PPOILUSDM, POILBREUSDM]}
+  - {name: "UN Comtrade", kind: api, series: unit_value_36m}
+  - {name: "World Bank Pink Sheet", kind: excel, series: cmo_monthly}
+
+# ⛔ KHÔNG cào (bản quyền/paywall) — nhập qua form:
+blocked: [ICIS, Platts, Argus, Fastmarkets, ChemOrbis, "Polymerupdate(paid)", WoodMackenzie]

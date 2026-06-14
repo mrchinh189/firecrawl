@@ -1,0 +1,23 @@
+# Giả định quy đổi landed/at-sight. CHỈNH số tại đây, KHÔNG sửa code.
+interest_pct_year: 0.065      # lãi vốn quy đổi usance
+usd_rmb: 7.15                 # tỉ giá USD/RMB để chuẩn hóa giá nội địa TQ
+default:
+  freight_insurance_pct: 0.07   # cước + bảo hiểm ước lượng (FOB/EXW -> CFR)
+  domestic_cost_vnd_kg: 800     # phí nội địa + thông quan ước lượng (đ/kg)
+duty_pct:                        # thuế NK theo NVL
+  pp: 0.03
+  pe: 0.02
+  ps: 0.03
+  tio2: 0.06
+  stearic: 0.05
+  default: 0.03
+payment_term_days:               # số ngày được nợ theo điều khoản
+  at_sight: 0
+  lc_at_sight: 0
+  lc_90: 90
+  lc_60: 60
+  tt_60: 60
+  tt_30: 30
+region_overrides:                # tùy chọn ghi đè theo vùng
+  "VN import (CIF)": {freight_insurance_pct: 0.0, domestic_cost_vnd_kg: 800}
+  "ex-works TQ":     {freight_insurance_pct: 0.10, domestic_cost_vnd_kg: 800}
