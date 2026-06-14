@@ -46,10 +46,18 @@ def build(out_path=None, data=None):
          "<meta name='viewport' content='width=device-width,initial-scale=1'>",
          f"<title>Price Intelligence — NVL</title><style>{CSS}</style></head><body>"]
     H.append("<h1 style='font-size:20px;color:#1F3A5F'>📊 Price Intelligence — NVL Masterbatch</h1>")
-    H.append(f"<p class='note'>EUP Group · Cập nhật lúc {v['run_at']} · 🟢≤7d 🟡≤30d 🔴&gt;30d</p>")
+    H.append(f"<p class='note'>EUP Group · Cập nhật lúc {v['run_at']}</p>")
+
+    # ① Cách đọc báo cáo
+    htr = v["how_to_read"]
+    H.append("<h2>① Cách đọc báo cáo này</h2>")
+    H.append(f"<p>{html.escape(htr['questions'])}</p>")
+    H.append(f"<p class='note'>{html.escape(htr['tip'])}</p>")
+    H.append(f"<div class='alert'>{html.escape(htr['note'])}</div>")
 
     # ② Tổng quan KPI
-    H.append("<h2>② Tổng quan nhanh</h2><div class='cards'>")
+    H.append("<h2>② Tổng quan nhanh</h2>")
+    H.append(f"<p class='note'>{html.escape(v['cadence'])}</p><div class='cards'>")
     for c in v["kpi"]:
         landed = f"<br><small>≈{c['landed']}</small>" if c.get("landed") else ""
         date = f"<br><small class='note'>{c['date']}</small>" if c.get("date") else ""

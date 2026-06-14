@@ -36,9 +36,13 @@ export interface Narrative { picture: string; why: string; impact: string; reco:
 export interface Commentary { scenario_up: string; scenario_down: string; watch: string }
 export interface Glossary { term: string; desc: string }
 
+export interface HowToRead { questions: string; tip: string; note: string }
+
 export interface Dashboard {
   run_at: string;
   source_mode: "supabase" | "mock";
+  how_to_read: HowToRead;
+  cadence: string;
   kpi: KpiCard[];
   narrative: Narrative;
   atsight: Record<string, { gap: number; rows: AtSightRow[] }>;

@@ -24,15 +24,24 @@ export default async function Page() {
       </header>
 
       <nav>
-        <a href="#kpi">② Tổng quan</a><a href="#phantich">③ Phân tích</a>
+        <a href="#cachdoc">① Cách đọc</a><a href="#kpi">② Tổng quan</a><a href="#phantich">③ Phân tích</a>
         <a href="#atsight">④ At-sight</a><a href="#khuvuc">⑤ Khu vực</a>
         <a href="#canhbao">⑦ Cảnh báo</a><a href="#dubao">⑧ Dự báo</a>
         <a href="#nguon">⑨ Nguồn</a><a href="#tintuc">⑩ Tin tức</a>
       </nav>
 
+      {/* ① Cách đọc */}
+      <section id="cachdoc">
+        <h2>① Cách đọc báo cáo này</h2>
+        <p>{d.how_to_read.questions}</p>
+        <p className="note">{d.how_to_read.tip}</p>
+        <div className="alert">{d.how_to_read.note}</div>
+      </section>
+
       {/* ② KPI */}
       <section id="kpi">
         <h2>② Tổng quan nhanh</h2>
+        <p className="note">{d.cadence}</p>
         <div className="cards">
           {d.kpi.map((c) => (
             <div className="card" key={c.key}>

@@ -19,6 +19,22 @@ GLOSSARY = [
 PAYMENT_LABEL = {"at_sight": "At sight", "lc_at_sight": "L/C at sight", "lc_90": "L/C 90 ngày",
                  "lc_60": "L/C 60 ngày", "tt_60": "TT 60 ngày", "tt_30": "TT 30 ngày"}
 
+SPREAD_LABEL = {"pp-propylene": "Spread PP−propylene", "naphtha-ethylene": "Spread naphtha−ethylene",
+                "ethylene-pe": "Spread ethylene−PE"}
+
+# ① Cách đọc báo cáo (bám báo cáo mẫu v4) — dẫn-đọc tĩnh
+HOW_TO_READ = {
+    "questions": ("Báo cáo trả lời 4 câu hỏi mua hàng: (1) giá đang ở đâu, (2) nguồn nào thực sự rẻ "
+                  "nhất sau khi quy về cùng mốc, (3) sắp tới giá đi hướng nào, (4) nên làm gì."),
+    "tip": ("💡 Mẹo đọc: bắt đầu ở mục Phân tích (lời, dễ hiểu), rồi xuống mục Giá chung để chọn nguồn, "
+            "cuối cùng xem Cảnh báo để biết việc cần làm. Các bảng số chi tiết để tra khi cần."),
+    "note": ("⚠️ Lưu ý quy đổi: mọi giá nhập khẩu chỉ so được khi đưa về cùng một mốc — cùng đơn vị "
+             "(VND/kg), cùng điểm giao (đã về kho), cùng điều khoản thanh toán. Báo cáo đã làm sẵn việc đó."),
+}
+CADENCE = ("Nhịp: daily (Brent·FX·futures) · weekly thứ Tư (spot·phụ gia) · monthly (hải quan). "
+           "Độ tươi 🟢≤7d 🟡≤30d 🔴>30d. Thẻ KPI: số lớn = giá mới nhất; ▲đỏ/▼xanh = thay đổi kỳ trước; "
+           "dòng ≈đ/kg = giá đã quy về kho VN.")
+
 
 def _today():
     return dt.date.today()
@@ -54,6 +70,15 @@ def build_view(data, today=None):
             "landed": (f"{b['landed_vnd_kg']:,.0f} đ/kg" if b else None),
             "date": last_date.get(p),
             "fresh": (lib.freshness(last_date[p], today) if last_date.get(p) else None),
+        })
+
+    # Thẻ Spread vào KPI (mục ②, bám v4: "Spread PP−propylene")
+    for s in data.get("spreads", []):
+        kpi.append({
+            "key": "spread_" + s["name"],
+            "label": SPREAD_LABEL.get(s["name"], "Spread " + s["name"]),
+            "value": f"{s['value']:,.0f} {s['unit']}",
+            "chg": None, "landed": None, "date": None, "fresh": None,
         })
 
     def _src(name):
@@ -118,6 +143,8 @@ def build_view(data, today=None):
     return {
         "run_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M") if today == _today() else f"{today} 00:00",
         "fx": fx,
+        "how_to_read": HOW_TO_READ,
+        "cadence": CADENCE,
         "kpi": kpi,
         "narrative": data["narrative"],
         "atsight": atsight_view,

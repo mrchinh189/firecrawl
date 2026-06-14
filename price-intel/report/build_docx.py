@@ -51,11 +51,17 @@ def build(out_path=None, data=None):
     v = render.build_view(data)
     doc = Document()
     doc.add_heading("Báo cáo phân tích giá NVL Masterbatch — EUP Group", level=0)
-    doc.add_paragraph(f"Cập nhật lúc {v['run_at']} · Phạm vi: nhựa nền + phụ gia (bỏ bột đá). "
-                      f"Độ tươi 🟢≤7d 🟡≤30d 🔴>30d.")
+    doc.add_paragraph(f"Cập nhật lúc {v['run_at']} · Phạm vi: nhựa nền + phụ gia (bỏ bột đá).")
+
+    # ① Cách đọc báo cáo
+    doc.add_heading("① Cách đọc báo cáo này", level=1)
+    doc.add_paragraph(v["how_to_read"]["questions"])
+    doc.add_paragraph(v["how_to_read"]["tip"])
+    doc.add_paragraph(v["how_to_read"]["note"])
 
     # ② KPI
     doc.add_heading("② Tổng quan nhanh (KPI)", level=1)
+    doc.add_paragraph(v["cadence"])
     rows = []
     for c in v["kpi"]:
         chg = "" if c["chg"] is None else (f"+{c['chg']:.1f}%" if c["chg"] > 0 else f"{c['chg']:.1f}%")
