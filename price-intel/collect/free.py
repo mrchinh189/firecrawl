@@ -10,7 +10,7 @@ from collect import common
 
 
 def eia_brent():
-    """Brent spot (RBRTE) từ EIA API. Cần EIA_KEY."""
+    """Brent spot (RBRTE) từ EIA API v2. Cần EIA_KEY. Đăng ký free: eia.gov/opendata."""
     if not common.has("EIA_KEY"):
         print("[skip] EIA_KEY trống")
         return []
@@ -18,7 +18,7 @@ def eia_brent():
         import requests
         url = ("https://api.eia.gov/v2/petroleum/pri/spt/data/"
                f"?api_key={common.env('EIA_KEY')}&frequency=daily&data[0]=value"
-               "&facets[product][]=EPCBRENT&sort[0][column]=period&sort[0][direction]=desc&length=5")
+               "&facets[series][]=RBRTE&sort[0][column]=period&sort[0][direction]=desc&length=5")
         r = requests.get(url, timeout=40); r.raise_for_status()
         out = []
         for rec in r.json().get("response", {}).get("data", []):
@@ -33,21 +33,33 @@ def eia_brent():
 
 
 def vietcombank_usdvnd():
-    """USD/VND từ XML công khai Vietcombank (không cần key)."""
+    """USD/VND từ API JSON chính thức Vietcombank (không cần key). Fallback VNAppMob.
+    Nguồn XML cũ (pXML.aspx) hay 403 với IP cloud -> dùng API JSON + Firecrawl khi cần."""
+    import datetime as _dt
+    today = _dt.date.today().isoformat()
+    # 1) API JSON chính thức
     try:
         import requests
-        from bs4 import BeautifulSoup
-        r = requests.get("https://portal.vietcombank.com.vn/UserControls/TVPortal.TyGia/pXML.aspx",
-                         timeout=30, headers={"User-Agent": "price-intel"})
+        r = requests.get(f"https://www.vietcombank.com.vn/api/exchangerates?date={today}",
+                         timeout=30, headers={"User-Agent": "Mozilla/5.0 price-intel"})
         r.raise_for_status()
-        soup = BeautifulSoup(r.text, "xml")
-        for ex in soup.find_all("Exrate"):
-            if ex.get("CurrencyCode") == "USD":
-                sell = float(str(ex.get("Sell")).replace(",", ""))
-                return [dict(date=dt.date.today().isoformat(), pair="USD/VND",
-                             rate=sell, source="Vietcombank")]
+        for row in r.json().get("Data", []):
+            if str(row.get("currencyCode", "")).upper() == "USD":
+                sell = float(str(row.get("sell")).replace(",", ""))
+                return [dict(date=today, pair="USD/VND", rate=sell, source="Vietcombank")]
     except Exception as e:  # noqa: BLE001
-        print(f"[skip] Vietcombank lỗi: {e}")
+        print(f"[warn] Vietcombank API lỗi: {e} -> thử VNAppMob")
+    # 2) Fallback VNAppMob (mirror VCB)
+    try:
+        import requests
+        r = requests.get("https://vapi.vnappmob.com/api/v2/exchange_rate/vcb", timeout=30)
+        r.raise_for_status()
+        for row in r.json().get("results", []):
+            if str(row.get("currency", "")).upper() == "USD":
+                return [dict(date=today, pair="USD/VND", rate=float(row["sell"]),
+                             source="Vietcombank")]
+    except Exception as e:  # noqa: BLE001
+        print(f"[skip] VNAppMob lỗi: {e}")
     return []
 
 

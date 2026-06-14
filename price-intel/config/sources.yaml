@@ -5,26 +5,35 @@ fetch:
   delay_sec: 4                 # delay lịch sự giữa request
   retry: 1
 
-# Tầng FREE (API/XML — không cần Firecrawl)
+# Tầng FREE (API/JSON — không cần Firecrawl). Đã kiểm chứng 2026-06.
 free:
-  - {name: "EIA RBRTE", kind: api, dataset: brent, freq: daily}
-  - {name: "Vietcombank", kind: xml, dataset: usdvnd, freq: daily}
-  - {name: "UN Comtrade", kind: api, dataset: unit_value_hs390102, freq: monthly}
+  - {name: "EIA RBRTE", kind: api, dataset: brent, freq: daily,
+     endpoint: "https://api.eia.gov/v2/petroleum/pri/spt/data/?facets[series][]=RBRTE", key: EIA_KEY}
+  - {name: "Vietcombank", kind: json, dataset: usdvnd, freq: daily,
+     endpoint: "https://www.vietcombank.com.vn/api/exchangerates?date=YYYY-MM-DD",
+     fallback: "https://vapi.vnappmob.com/api/v2/exchange_rate/vcb"}
+  - {name: "UN Comtrade", kind: api, dataset: unit_value_hs390102, freq: monthly, key: COMTRADE_KEY}
 
 # Tầng FIRECRAWL (HTML -> markdown -> AI extract). prefer=firecrawl ở trên.
+# Các trang sau ĐÃ KIỂM CHỨNG chặn HTTP thường (403) -> cần Firecrawl. URL cụ thể từng mã.
 firecrawl:
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/polypropylene-price-index/", product: [pp], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/polyethylene-price-index/", product: [pe, hdpe], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/propylene-price-index/", product: [propylene], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/stearic-acid-price-index/", product: [stearic], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/titanium-dioxide-tio2-china-price-index/", product: [tio2], freq: monthly}
+  - {name: "Polymerupdate-free", url: "https://polymerupdate.com/prices/sea/polymers/pp", product: [pp], freq: weekly}
+  - {name: "Polymerupdate-free", url: "https://polymerupdate.com/prices/sea/polymers/pe", product: [pe], freq: weekly}
   - {name: "ThePlasticsExchange", url: "https://www.theplasticsexchange.com/", product: [pp, pe], freq: weekly}
   - {name: "DCE delayed", url: "https://www.dce.com.cn/DCE/Market/marketdata/index.html", product: [pp], freq: daily}
-  - {name: "Polymerupdate-free", url: "https://www.polymerupdate.com/", product: [pp, pe, ps], freq: weekly}
-  - {name: "businessanalytiq", url: "https://www.businessanalytiq.com/procurementanalytics/index/", product: [tio2, stearic, pe_wax], freq: monthly}
-  - {name: "MPOB", url: "https://bepi.mpob.gov.my/index.php/en/", product: [stearic], freq: weekly}
 
-# Nguồn tin tức (chỉ tiêu đề + tóm tắt + link — KHÔNG full-text)
+# Nguồn tin tức (chỉ tiêu đề + tóm tắt + link — KHÔNG full-text). Google News RSS không chặn.
 news:
-  - {name: "Polymerupdate-free", url: "https://www.polymerupdate.com/", category: resin}
-  - {name: "businessanalytiq", url: "https://www.businessanalytiq.com/procurementanalytics/index/", category: additive}
-  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=polypropylene+price", category: resin}
-  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=TiO2+price", category: additive}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=polypropylene+price+CFR", category: resin}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=polyethylene+price+Asia", category: resin}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=TiO2+titanium+dioxide+price", category: additive}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=stearic+acid+palm+oil+price", category: additive}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=naphtha+Asia+price", category: feedstock}
 
 # Nguồn backfill lịch sử (3–5 năm) cho forecast tin cậy hơn
 history:

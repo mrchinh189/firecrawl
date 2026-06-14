@@ -10,10 +10,12 @@ import sys
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
 from collect import common
 
+# Series FRED đã kiểm chứng (2026-06). Free key: fred.stlouisfed.org.
 FRED_SERIES = {
-    "PCU325211325211": ("pp", "index", "PPI nhựa & resin (proxy driver)"),
-    "PPOILUSDM": ("stearic", "index", "Global Palm Oil (driver oleochemical)"),
-    "POILBREUSDM": ("brent", "index", "Brent monthly dài hạn"),
+    "PCU325211325211":   ("pp", "index", "PPI Plastics Material & Resin (1976→, proxy driver)"),
+    "PCU3252113252111":  ("pe", "index", "PPI Thermoplastic Resins (proxy driver)"),
+    "PPOILUSDM":         ("stearic", "index", "Global Palm Oil USD/MT (driver oleochemical: stearic/wax)"),
+    "POILBREUSDM":       ("brent", "index", "Global price of Brent (monthly dài hạn)"),
 }
 
 
