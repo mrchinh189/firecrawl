@@ -110,6 +110,22 @@ export default async function Page() {
         </table>
       </section>
 
+      {/* Cần review (QC) — chỉ hiện khi có */}
+      {d.review.length > 0 && (
+        <section id="review">
+          <h2 style={{ color: "#C1432E" }}>⚠ Cần review ({d.review.length})</h2>
+          <table>
+            <thead><tr><th>NVL</th><th>Khu vực</th><th>Nguồn</th><th>Giá</th><th>Ngày</th><th>Ghi chú</th></tr></thead>
+            <tbody>
+              {d.review.map((r, i) => (
+                <tr key={i}><td>{r.product}</td><td>{r.region}</td><td>{r.source}</td>
+                  <td>{vnd(r.value)}</td><td>{r.date}</td><td>{r.note}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
+
       {/* ⑦ Cảnh báo */}
       <section id="canhbao">
         <h2>⑦ Cảnh báo & Đề xuất</h2>

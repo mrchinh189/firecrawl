@@ -104,6 +104,13 @@ def build(out_path=None, data=None):
             c[i].text = str(val)
         _add_hyperlink(c[6].paragraphs[0], r["label"], r["url"])
 
+    # Cần review (QC gắn cờ) — chỉ hiện khi có
+    if v.get("review"):
+        doc.add_heading(f"⚠ Cần review ({len(v['review'])})", level=1)
+        _table(doc, ["NVL", "Khu vực", "Nguồn", "Giá", "Ngày", "Ghi chú"],
+               [[r["product"], r["region"], r["source"], f"{r['value']:,.0f}", r["date"], r["note"]]
+                for r in v["review"]])
+
     # ⑥ Insight chart (matplotlib PNG)
     doc.add_heading("⑥ Insight — chỉ số gốc-100", level=1)
     img = _index_chart_png(v)

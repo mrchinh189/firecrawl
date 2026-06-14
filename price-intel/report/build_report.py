@@ -99,6 +99,17 @@ def build(out_path=None, data=None):
                  f"<td>{r['fresh']['emoji']}{r['fresh']['days']}d</td></tr>")
     H.append("</table>")
 
+    # Cần review (QC gắn cờ) — chỉ hiện khi có
+    if v.get("review"):
+        H.append(f"<h2 style='color:#C1432E'>⚠ Cần review ({len(v['review'])})</h2>")
+        H.append("<table><tr><th>NVL</th><th>Khu vực</th><th>Nguồn</th><th>Giá</th>"
+                 "<th>Ngày</th><th>Ghi chú</th></tr>")
+        for r in v["review"]:
+            H.append(f"<tr><td>{r['product']}</td><td>{html.escape(str(r['region']))}</td>"
+                     f"<td>{html.escape(str(r['source']))}</td><td>{r['value']:,.0f}</td>"
+                     f"<td>{r['date']}</td><td>{html.escape(r['note'])}</td></tr>")
+        H.append("</table>")
+
     # ⑥ Insight — biểu đồ (plotly) chuỗi + gốc-100
     H.append("<h2>⑥ Insight — xu hướng & chỉ số gốc-100</h2>")
     H.append(_charts_html(v))

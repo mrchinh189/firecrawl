@@ -131,7 +131,15 @@ def build_view(data, today=None):
                         "price_type": r["price_type"], "date": r["date"],
                         "fresh": lib.freshness(r["date"], today)})
 
-    # 5) Forecast theo product
+    # 5b) Dòng cần review (QC gắn cờ '[review]' khi nhảy >ngưỡng) — bám v1/v2
+    review = []
+    for r in rows:
+        if "[review]" in str(r.get("note", "")):
+            review.append({"product": str(r["product"]).upper(), "region": r["region"],
+                           "source": r["source"], "value": r["value"], "date": r["date"],
+                           "note": str(r.get("note", ""))})
+
+    # 6) Forecast theo product
     fc = {}
     for r in data["forecast"]:
         fc.setdefault(r["product"], {"meta": {"model": r["model"], "theils_u": r["theils_u"],
@@ -149,6 +157,7 @@ def build_view(data, today=None):
         "narrative": data["narrative"],
         "atsight": atsight_view,
         "allregion": allregion,
+        "review": review,
         "spreads": data["spreads"],
         "forecast": fc,
         "alerts": data["alerts"],

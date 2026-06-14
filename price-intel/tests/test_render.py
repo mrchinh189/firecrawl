@@ -16,6 +16,8 @@ def test_view_model_shape():
     assert v["sources"] and any(s["url"] for s in v["sources"])
     assert v["news"] and v["narrative"]["picture"] and v["alerts"]
     assert v["glossary"] and v["forecast"].get("pp")
+    assert "review" in v and "how_to_read" in v and "cadence" in v   # bám mẫu v1/v2/v4
+    assert any(c["key"].startswith("spread_") for c in v["kpi"])     # thẻ Spread (v4)
 
 
 def test_glossary_static():

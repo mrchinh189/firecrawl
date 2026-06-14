@@ -24,6 +24,7 @@ export interface ForecastBlock {
   rows: ForecastRow[];
 }
 
+export interface ReviewRow { product: string; region: string; source: string; value: number; date: string; note: string }
 export interface AlertCard { severity: string; title: string; detail: string; recommendation: string }
 export interface SourceRow {
   source: string; label: string; url: string | null;
@@ -47,6 +48,7 @@ export interface Dashboard {
   narrative: Narrative;
   atsight: Record<string, { gap: number; rows: AtSightRow[] }>;
   allregion: AllRegionRow[];
+  review: ReviewRow[];
   forecast: Record<string, ForecastBlock>;
   alerts: AlertCard[];
   commentary: Commentary | null;
