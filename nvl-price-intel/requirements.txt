@@ -1,0 +1,25 @@
+# Core
+httpx>=0.27,<0.29
+pydantic>=2.6,<3
+pydantic-settings>=2.2,<3
+
+# AI
+anthropic>=0.40
+
+# Web + scheduler
+fastapi>=0.110,<1
+uvicorn[standard]>=0.29
+APScheduler>=3.10,<4
+
+# Telegram bot
+python-telegram-bot>=21,<22
+
+# Report
+python-docx>=1.1
+
+# Storage (Supabase tuỳ chọn — chỉ cần khi STORAGE_BACKEND=supabase)
+supabase>=2.4
+
+# Test
+pytest>=8.0
+pytest-asyncio>=0.23

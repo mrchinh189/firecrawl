@@ -1,0 +1,24 @@
+services:
+  # API web + dashboard + lịch tự động (APScheduler) + endpoint kích hoạt thủ công
+  web:
+    build: .
+    image: nvl-price-intel
+    command: python -m app.web
+    env_file: .env
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  # Bot Telegram nhận lệnh /capnhat, /gia (long polling)
+  bot:
+    build: .
+    image: nvl-price-intel
+    command: python -m app.telegram_bot
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - web
