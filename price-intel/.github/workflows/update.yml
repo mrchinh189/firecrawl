@@ -27,8 +27,11 @@ jobs:
           DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
         run: |
           python fixtures/make_fixtures.py || true   # demo data nếu chưa có nguồn thật
-          python collect/daily.py || true
-          python run_pipeline.py
+          python collect/free.py || true             # EIA Brent + Vietcombank USD/VND
+          python collect/daily.py || true            # nguồn cào (ưu tiên Firecrawl) -> AI extract
+          python collect/news.py || true             # tin tức (RSS + Firecrawl)
+          python db/load.py || true                  # QC staging -> price_master
+          python run_pipeline.py                     # analysis + HTML + DOCX + Telegram + dashboard
       - uses: actions/upload-artifact@v4
         with:
           name: report

@@ -12,7 +12,6 @@ python-docx
 matplotlib
 kaleido
 openpyxl
-feedparser
 pytest
 # Tùy chọn (fallback cào khi Firecrawl lỗi). Cài thêm: pip install scrapling && scrapling install
 # scrapling

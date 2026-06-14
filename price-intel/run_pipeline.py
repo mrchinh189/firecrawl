@@ -5,8 +5,9 @@ import pathlib
 import sys
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent))
-from analytics import build_analysis
-from report import build_report, build_docx
+import datetime as dt
+from analytics import build_analysis, store
+from report import build_report, build_docx, render
 from alerts import telegram
 
 
@@ -18,6 +19,8 @@ def run(out_dir=None, send=True):
     docx_path = base / "bao_cao_phan_tich.docx"
     build_report.build(out_path=str(html_path), data=data)
     build_docx.build(out_path=str(docx_path), data=data)
+    # Ghi view-model đầy đủ để web dashboard đọc lại (parity Web = DOCX = Telegram)
+    store.write_analysis(dt.date.today().isoformat(), "dashboard", render.build_view(data))
     text = telegram.build_summary(data)
     if send:
         telegram.send_text(text)                      # thiếu token -> dry-run
