@@ -122,6 +122,13 @@ def build(out_path=None, data=None):
                [[r["week"], f"{r['yhat']:,.0f}", f"{r['lower']:,.0f}", f"{r['upper']:,.0f}"]
                 for r in blk["rows"]])
 
+    if v.get("commentary"):
+        c = v["commentary"]
+        doc.add_heading("Kịch bản (AI — Claude diễn giải, số do thống kê)", level=2)
+        doc.add_paragraph(f"📈 Kịch bản tăng: {c.get('scenario_up','')}")
+        doc.add_paragraph(f"📉 Kịch bản giảm: {c.get('scenario_down','')}")
+        doc.add_paragraph(f"👁 Theo dõi: {c.get('watch','')}")
+
     # ⑨ Nguồn & độ tươi + Thuật ngữ
     doc.add_heading("⑨ Nguồn & độ tươi", level=1)
     t = doc.add_table(rows=1, cols=5); t.style = "Light Grid Accent 1"

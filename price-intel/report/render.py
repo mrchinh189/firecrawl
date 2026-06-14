@@ -125,6 +125,7 @@ def build_view(data, today=None):
         "spreads": data["spreads"],
         "forecast": fc,
         "alerts": data["alerts"],
+        "commentary": data.get("commentary"),
         "sources": sources,
         "series": data["series"],
         "news": store.read_news(),

@@ -130,6 +130,14 @@ export default async function Page() {
             </table>
           </div>
         ))}
+        {d.commentary && (
+          <div style={{ marginTop: 8 }}>
+            <h3>Kịch bản (AI — Claude diễn giải, số do thống kê)</h3>
+            <p>📈 <b>Kịch bản tăng:</b> {d.commentary.scenario_up}</p>
+            <p>📉 <b>Kịch bản giảm:</b> {d.commentary.scenario_down}</p>
+            <p>👁 <b>Theo dõi:</b> {d.commentary.watch}</p>
+          </div>
+        )}
       </section>
 
       {/* ⑨ Nguồn + Thuật ngữ */}

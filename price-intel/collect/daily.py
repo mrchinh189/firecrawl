@@ -14,7 +14,7 @@ import pathlib
 import sys
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
-from collect import common, firecrawl_client as fc
+from collect import common, firecrawl_client as fc, normalize
 import lib
 
 PRICE_SCHEMA = (
@@ -51,10 +51,10 @@ def collect_firecrawl():
         if not records:
             print(f"[skip] {name}: chưa bóc được số (thiếu ANTHROPIC_API_KEY?)")
             continue
-        for r in records:
-            r.setdefault("source", name)
-            r.setdefault("date", dt.date.today().isoformat())
-            out.append(r)
+        # Chuẩn hóa về schema staging (map product key, currency/unit/date, loại bản ghi xấu)
+        norm = normalize.normalize(records, source=name)
+        print(f"[OK] {name}: {len(norm)}/{len(records)} bản ghi hợp lệ")
+        out.extend(norm)
         common.polite_sleep(delay)
     return out
 

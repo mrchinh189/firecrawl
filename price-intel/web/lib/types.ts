@@ -33,6 +33,7 @@ export interface NewsItem {
   published_at: string; title: string; url: string; summary: string; source: string; category: string;
 }
 export interface Narrative { picture: string; why: string; impact: string; reco: string }
+export interface Commentary { scenario_up: string; scenario_down: string; watch: string }
 export interface Glossary { term: string; desc: string }
 
 export interface Dashboard {
@@ -44,6 +45,7 @@ export interface Dashboard {
   allregion: AllRegionRow[];
   forecast: Record<string, ForecastBlock>;
   alerts: AlertCard[];
+  commentary: Commentary | null;
   sources: SourceRow[];
   news: NewsItem[];
   glossary: Glossary[];

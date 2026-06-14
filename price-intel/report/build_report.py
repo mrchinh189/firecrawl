@@ -112,6 +112,12 @@ def build(out_path=None, data=None):
             H.append(f"<tr><td>{r['week']}</td><td>{r['yhat']:,.0f}</td>"
                      f"<td>{r['lower']:,.0f}–{r['upper']:,.0f}</td></tr>")
         H.append("</table>")
+    if v.get("commentary"):
+        c = v["commentary"]
+        H.append("<h3>Kịch bản (AI — Claude diễn giải, số do thống kê)</h3>")
+        H.append(f"<p>📈 <b>Kịch bản tăng:</b> {html.escape(c.get('scenario_up',''))}</p>")
+        H.append(f"<p>📉 <b>Kịch bản giảm:</b> {html.escape(c.get('scenario_down',''))}</p>")
+        H.append(f"<p>👁 <b>Theo dõi:</b> {html.escape(c.get('watch',''))}</p>")
 
     # ⑨ Nguồn & độ tươi + Thuật ngữ
     H.append("<h2>⑨ Nguồn & độ tươi</h2>")

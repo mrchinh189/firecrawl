@@ -7,7 +7,7 @@ import sys
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
 from analytics import landed as L, spreads as S, narrative as N, store
-from forecast import run as F
+from forecast import run as F, commentary as C
 from alerts import rules as R
 import lib
 
@@ -86,6 +86,11 @@ def run():
     store.write_analysis(run_date, "narrative", narr)
     store.write_analysis(run_date, "alerts", cards)
 
+    # Diễn giải dự báo + kịch bản bằng Claude (số giữ thống kê). Thiếu key -> None, bỏ qua.
+    cmt = C.build({"forecast_pct": forecast_pct}, spread_rows, store.read_news(limit=6))
+    if cmt:
+        store.write_analysis(run_date, "commentary", cmt)
+
     # 5) kpi/rows/series cho report + telegram (parity)
     products = sorted({r["product"] for r in rows})
     kpi = {
@@ -102,7 +107,7 @@ def run():
     store.write_analysis(run_date, "kpi", {"latest": latest, "fx": fx, "forecast_pct": forecast_pct})
 
     return {"landed": landed_rows, "spreads": spread_rows, "forecast": fc_rows,
-            "narrative": narr, "alerts": cards, "ctx": ctx,
+            "narrative": narr, "alerts": cards, "ctx": ctx, "commentary": cmt,
             "kpi": kpi, "rows": rows, "series": series}
 
 
