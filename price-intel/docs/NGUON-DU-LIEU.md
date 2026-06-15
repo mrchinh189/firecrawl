@@ -32,6 +32,29 @@ Kết luận quan trọng: **nhiều nguồn chặn HTTP thường (403) → B�
 
 → Sau khi Firecrawl trả markdown, `firecrawl_client.ai_extract()` dùng Claude bóc số theo schema, rồi `collect/normalize.py` chuẩn hóa về `price_master`.
 
+## 🆕 Nguồn bổ sung (bạn cung cấp — đã research 2026-06)
+
+Đều **chặn HTTP thường (403, đã test)** → vào qua Firecrawl. Là **driver** cho phụ gia oleochemical/kẽm.
+
+| Nguồn | URL | Dữ liệu | Map driver |
+|---|---|---|---|
+| **MPOC** | `mpoc.org.my/market-insight/daily-palm-oil-prices/` | Giá dầu cọ ngày (CPO/RBD palm olein, RM/MT) | `palm_oil` → stearic, PE wax, zinc/calcium stearate |
+| **Investing FCPO** | `investing.com/commodities/malaysian-crude-palm-oil-futures-historical-data` | Futures dầu cọ Bursa (MYR/MT, hợp đồng 25t), lịch sử free | `palm_oil` (futures — leading) |
+| **LME Zinc** | `lme.com/en/Metals/Non-ferrous/LME-Zinc` | Giá kẽm **day-delayed** free (USD/t) | `lme_zinc` → zinc stearate |
+| **SCI99** | `intl.sci99.com` | Giá hóa chất/nhựa/TiO₂/oleochemical TQ | tio2, stearic — ⚠️ **CẦN ĐĂNG KÝ/TRẢ PHÍ**, chỉ bóc phần free |
+
+**Nguồn dầu cọ thay thế KHÔNG chặn (free, có thể tải thẳng):**
+- MPOB daily: `bepi.mpob.gov.my/index.php/price/daily` (đã có trong sources)
+- IndexMundi palm oil monthly MYR (CSV/chart free): `indexmundi.com/commodities/?commodity=palm-oil&currency=myr`
+- FRED `PPOILUSDM` (đã dùng cho backfill — không cần Firecrawl)
+
+→ Đã thêm `palm_oil` + `lme_zinc` vào `materials.yaml` (feedstock/driver) và gán làm `price_sources` cho
+stearic/pe_wax/zinc_st/ca_st. `normalize.py` nhận diện palm oil/CPO/FCPO/zinc. forecast dùng làm
+**proxy driver** khi phụ gia thiếu giá tuyệt đối (gắn cờ độ tin cậy "thấp").
+
+> 💡 Lưu ý SCI99: là dịch vụ trả phí (4M user, nhiều khách Fortune 500). Nếu bạn có tài khoản, có thể
+> thêm credential/cookie cho Firecrawl; nếu không, ưu tiên MPOC/MPOB/businessanalytiq cho TiO₂/stearic.
+
 ## ⛔ KHÔNG cào (bản quyền/paywall — đã xác nhận)
 
 ICIS · S&P Global Platts (kể cả "CFR Vietnam PE/PP assessments" mới) · Argus · ChemOrbis ·

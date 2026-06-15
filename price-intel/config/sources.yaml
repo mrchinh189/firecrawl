@@ -26,6 +26,12 @@ firecrawl:
   - {name: "Polymerupdate-free", url: "https://polymerupdate.com/prices/sea/polymers/pe", product: [pe], freq: weekly}
   - {name: "ThePlasticsExchange", url: "https://www.theplasticsexchange.com/", product: [pp, pe], freq: weekly}
   - {name: "DCE delayed", url: "https://www.dce.com.cn/DCE/Market/marketdata/index.html", product: [pp], freq: daily}
+  # --- Nguồn driver oleochemical/kẽm (bạn cung cấp) — đều chặn HTTP thường, cần Firecrawl ---
+  - {name: "MPOC palm oil", url: "https://www.mpoc.org.my/market-insight/daily-palm-oil-prices/", product: [palm_oil], freq: daily}
+  - {name: "Investing FCPO", url: "https://www.investing.com/commodities/malaysian-crude-palm-oil-futures-historical-data", product: [palm_oil], freq: daily}
+  - {name: "LME Zinc", url: "https://www.lme.com/en/Metals/Non-ferrous/LME-Zinc", product: [lme_zinc], freq: daily}
+  # SCI99: giá hóa chất/nhựa/TiO2 TQ — CẦN ĐĂNG KÝ/TRẢ PHÍ; chỉ bóc phần free, fail-soft nếu login-gated
+  - {name: "SCI99", url: "https://intl.sci99.com/", product: [tio2, stearic], freq: weekly, needs_login: true}
 
 # Nguồn tin tức (chỉ tiêu đề + tóm tắt + link — KHÔNG full-text). Google News RSS không chặn.
 news:

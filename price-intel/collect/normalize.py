@@ -24,6 +24,10 @@ ALIASES = {
     "zinc stearate": "zinc_st", "calcium stearate": "ca_st",
     "carbon black": "carbon", "naphtha": "naphtha", "ethylene": "ethylene",
     "propylene": "propylene", "brent": "brent",
+    # Driver oleochemical & kẽm (nguồn MPOC/Investing/LME)
+    "palm oil": "palm_oil", "crude palm oil": "palm_oil", "cpo": "palm_oil",
+    "fcpo": "palm_oil", "palm olein": "palm_oil", "rbd palm olein": "palm_oil",
+    "zinc": "lme_zinc", "lme zinc": "lme_zinc",
 }
 
 CUR_MAP = {"usd": "USD", "us$": "USD", "$": "USD", "usc": "USc", "cents": "USc", "¢": "USc",

@@ -8,6 +8,21 @@ def test_product_key_aliases():
     assert normalize.product_key("xi măng") is None
 
 
+def test_driver_aliases_palmoil_zinc():
+    # Nguồn bổ sung: MPOC/Investing (dầu cọ) + LME (kẽm)
+    assert normalize.product_key("Crude Palm Oil") == "palm_oil"
+    assert normalize.product_key("FCPO futures") == "palm_oil"
+    assert normalize.product_key("RBD Palm Olein") == "palm_oil"
+    assert normalize.product_key("LME Zinc") == "lme_zinc"
+
+
+def test_normalize_accepts_palmoil():
+    raw = [{"product": "Crude Palm Oil", "value": "4100", "currency": "MYR", "unit": "ton",
+            "region": "Bursa", "date": "2026-06-12"}]
+    out = normalize.normalize(raw, source="MPOC palm oil")
+    assert len(out) == 1 and out[0]["product"] == "palm_oil"
+
+
 def test_norm_currency_unit():
     assert normalize.norm_currency("US$") == "USD"
     assert normalize.norm_currency("cents") == "USc"
