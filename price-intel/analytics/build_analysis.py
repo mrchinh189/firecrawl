@@ -6,17 +6,30 @@ import pathlib
 import sys
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
-from analytics import landed as L, spreads as S, narrative as N, store
+from analytics import landed as L, spreads as S, narrative as N, store, validate as V
 from forecast import run as F, commentary as C
 from alerts import rules as R
 import lib
 
 
-def _latest_by_product(rows):
-    """Giá mới nhất mỗi product (theo ngày)."""
-    out = {}
+def _latest_by_product(rows, usd_rmb=7.15):
+    """Giá mới nhất mỗi product, CHUẨN HÓA về USD/tấn (brent giữ USD/bbl).
+    Ưu tiên chuỗi 'CFR SE Asia' (USD/tấn sạch) — không cho nguồn RMB/cents ghi đè (tránh lỗi đơn vị)."""
+    out, chosen_region = {}, {}
     for r in sorted(rows, key=lambda x: x["date"]):
-        out[r["product"]] = r["value"]
+        p = r["product"]
+        if p == "brent":
+            out[p] = r["value"]            # giữ USD/bbl
+            continue
+        usd = L.to_usd_per_ton(r.get("value"), r.get("currency"), r.get("unit"), usd_rmb)
+        if usd is None:
+            continue
+        region = r.get("region", "")
+        # đã chốt CFR SE Asia thì không cho vùng khác ghi đè (giữ mốc chuẩn)
+        if chosen_region.get(p) == "CFR SE Asia" and region != "CFR SE Asia":
+            continue
+        out[p] = round(usd)
+        chosen_region[p] = region
     return out
 
 
@@ -49,7 +62,7 @@ def run():
         for r in landed_rows])
 
     # 2) spreads
-    latest = _latest_by_product(rows)
+    latest = _latest_by_product(rows, usd_rmb=cfg.get("usd_rmb", 7.15))
     spread_rows = S.compute(latest)
     store.write_rows("spreads", [{"date": run_date, **s, "note": ""} for s in spread_rows])
 
@@ -83,8 +96,12 @@ def run():
     }
     narr = N.build(ctx)
     cards = R.evaluate(ctx, thresholds)
+    # Sanity QC: kiểm tra dải giá hợp lý + tương quan chéo (bắt lỗi bóc số / đảo giá / nhầm đơn vị)
+    dq_warns = V.validate(latest)
+    cards = cards + V.as_alert_cards(dq_warns)
     store.write_analysis(run_date, "narrative", narr)
     store.write_analysis(run_date, "alerts", cards)
+    store.write_analysis(run_date, "data_quality", dq_warns)
 
     # Diễn giải dự báo + kịch bản bằng Claude (số giữ thống kê). Thiếu key -> None, bỏ qua.
     cmt = C.build({"forecast_pct": forecast_pct}, spread_rows, store.read_news(limit=6))
@@ -108,7 +125,7 @@ def run():
 
     return {"landed": landed_rows, "spreads": spread_rows, "forecast": fc_rows,
             "narrative": narr, "alerts": cards, "ctx": ctx, "commentary": cmt,
-            "kpi": kpi, "rows": rows, "series": series}
+            "data_quality": dq_warns, "kpi": kpi, "rows": rows, "series": series}
 
 
 if __name__ == "__main__":

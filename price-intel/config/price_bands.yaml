@@ -1,0 +1,27 @@
+# Dải giá hợp lý theo NVL (USD/tấn; brent & lme_zinc theo đơn vị riêng) — chặn lỗi bóc số sai
+# (đảo grade, nhầm đơn vị cents/lb↔USD/t, RMB↔USD). Số tham chiếu 2026-06 từ thị trường + research.
+# CHỈNH tại đây khi mặt bằng giá đổi. Ngoài dải -> gắn cờ data-quality (KHÔNG xóa, để người duyệt).
+bands_usd_ton:
+  pp:        {min: 850,  max: 1450, typical: 1100}
+  pe:        {min: 900,  max: 1450, typical: 1150}   # LLDPE film grade
+  hdpe:      {min: 900,  max: 1450, typical: 1150}
+  ps:        {min: 1050, max: 1750, typical: 1350}
+  tio2:      {min: 1900, max: 3100, typical: 2500}   # rutile — luôn cao hơn nhựa nền
+  stearic:   {min: 900,  max: 1550, typical: 1200}
+  zinc_st:   {min: 1450, max: 2200, typical: 1750}   # > stearic (làm từ stearic + kẽm)
+  pe_wax:    {min: 700,  max: 1200, typical: 950}
+  base_oil:  {min: 550,  max: 1350, typical: 900}
+  carbon:    {min: 700,  max: 2600, typical: 1300}
+  naphtha:   {min: 550,  max: 1250, typical: 950}
+  ethylene:  {min: 750,  max: 1600, typical: 1100}
+  propylene: {min: 750,  max: 1600, typical: 1050}
+  palm_oil:  {min: 650,  max: 1450, typical: 950}
+# Đơn vị riêng:
+brent_usd_bbl: {min: 45, max: 130, typical: 80}
+lme_zinc_usd_ton: {min: 1900, max: 3600, typical: 2700}
+
+# Quy tắc tương quan chéo (bắt lỗi đảo giá mà bản rà soát chỉ ra):
+cross_rules:
+  - {desc: "TiO2 (phụ gia màu trắng) phải đắt hơn nhựa nền PP", higher: tio2, lower: pp}
+  - {desc: "TiO2 phải đắt hơn nhựa nền PE", higher: tio2, lower: pe}
+  - {desc: "Zinc stearate phải đắt hơn Stearic acid (làm từ stearic + kẽm)", higher: zinc_st, lower: stearic}

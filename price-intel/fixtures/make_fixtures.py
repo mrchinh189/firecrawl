@@ -11,11 +11,12 @@ END = dt.date(2026, 6, 10)
 DATES = [END - dt.timedelta(weeks=(WEEKS - 1 - i)) for i in range(WEEKS)]
 
 # giá nền + độ dốc tuyến tính (không random) cho chuỗi mượt
-BASE = {  # product: (start, end) USD/tấn (brent USD/bbl)
+BASE = {  # product: (start, end) USD/tấn (brent USD/bbl) — số tham chiếu vùng thực tế 2026
     "brent": (95, 93), "naphtha": (1010, 944), "ethylene": (1180, 1100),
-    "propylene": (1090, 1020), "pp": (1330, 1189), "pe": (1230, 1127),
+    "propylene": (1090, 1020), "pp": (1330, 1189), "pe": (1230, 1165),
     "hdpe": (1260, 1150), "ps": (1360, 1319), "tio2": (2200, 2344),
-    "stearic": (1330, 1316),
+    "stearic": (1240, 1180), "zinc_st": (1820, 1760), "pe_wax": (980, 950),
+    "base_oil": (940, 900), "palm_oil": (920, 905),
 }
 UNIT = {"brent": ("USD", "bbl")}  # còn lại USD/ton
 
