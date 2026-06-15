@@ -1,0 +1,10 @@
+# Lịch tự động hàng tuần (thứ Tư 09:00 giờ VN = 02:00 UTC). Kích hoạt khi price-intel/ là gốc repo.
+name: weekly
+on:
+  schedule:
+    - cron: "0 2 * * 3"     # 02:00 UTC thứ Tư
+  workflow_dispatch:
+jobs:
+  run:
+    uses: ./.github/workflows/update.yml
+    secrets: inherit

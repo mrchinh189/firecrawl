@@ -1,0 +1,22 @@
+# Danh mục NVL theo dõi — chốt từ Danh muc NVL Masterlist.xlsx (theo % chi tiêu thực).
+# spend_weight: tỉ trọng tham khảo (tỷ VND) để ưu tiên & dựng basket index (Phase sau).
+# duty_key: khóa tra thuế NK trong landed.yaml. price_sources: gợi ý nguồn giá.
+materials:
+  - {key: pp,       label: "PP",            family: resin,    spend_weight: 690, priority: 1, duty_key: pp,      price_sources: [tpe, dce, pu_free, comtrade]}
+  - {key: pe,       label: "PE (LLDPE/LDPE)", family: resin,  spend_weight: 750, priority: 1, duty_key: pe,      price_sources: [tpe, dce, pu_free, comtrade]}
+  - {key: hdpe,     label: "HDPE",          family: resin,    spend_weight: 25,  priority: 2, duty_key: pe,      price_sources: [tpe, pu_free]}
+  - {key: ps,       label: "PS (GPPS/HIPS/ABS)", family: resin, spend_weight: 11, priority: 3, duty_key: ps,    price_sources: [pu_free, comtrade]}
+  - {key: tio2,     label: "TiO2 rutile",   family: additive, spend_weight: 61,  priority: 1, duty_key: tio2,    price_sources: [tio2_blog, businessanalytiq]}
+  - {key: pe_wax,   label: "PE wax",        family: additive, spend_weight: 187, priority: 1, duty_key: default, price_sources: [businessanalytiq, mpoc_palmoil, sci99, ncc_quote]}
+  - {key: base_oil, label: "Base/Paraffin oil", family: additive, spend_weight: 370, priority: 1, duty_key: default, price_sources: [businessanalytiq, brent, ncc_quote]}
+  - {key: stearic,  label: "Stearic acid",  family: additive, spend_weight: 132, priority: 1, duty_key: stearic, price_sources: [stearic_blog, mpoc_palmoil, fcpo, businessanalytiq]}
+  - {key: zinc_st,  label: "Zinc stearate", family: additive, spend_weight: 121, priority: 1, duty_key: default, price_sources: [lme_zinc, mpoc_palmoil, businessanalytiq, ncc_quote]}
+  - {key: ca_st,    label: "Calcium stearate", family: additive, spend_weight: 7, priority: 2, duty_key: default, price_sources: [mpoc_palmoil, ncc_quote]}
+  - {key: carbon,   label: "Carbon black",  family: additive, spend_weight: 2,  priority: 2, duty_key: default, price_sources: [businessanalytiq, ncc_quote]}
+  - {key: coupling, label: "Coupling agent", family: additive, spend_weight: 5, priority: 3, duty_key: default, price_sources: [ncc_quote]}
+  - {key: uv,       label: "UV stabilizer", family: additive, spend_weight: 18, priority: 3, duty_key: default, price_sources: [ncc_quote]}
+  - {key: fr,       label: "Flame retardant (Sb2O3/DBDPE)", family: additive, spend_weight: 9, priority: 3, duty_key: default, price_sources: [ncc_quote]}
+# Feedstock & driver (chỉ báo dẫn — không landed):
+#   brent/naphtha/ethylene/propylene -> nhựa nền; palm_oil -> oleochemical (stearic/wax/stearate);
+#   lme_zinc -> zinc stearate. Dùng làm proxy driver khi phụ gia thiếu giá tuyệt đối.
+feedstock: [brent, naphtha, ethylene, propylene, palm_oil, lme_zinc]

@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+data/raw/
+data/*.html
+data/*.docx
+data/*.png
+.pytest_cache/
+node_modules/
+web/.next/

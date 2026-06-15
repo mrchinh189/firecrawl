@@ -1,0 +1,6 @@
+# Model Claude theo từng khâu. Chỉnh tại đây để cân chi phí/chất lượng.
+extract: claude-sonnet-4-6     # bóc số (nhiều lần) — rẻ
+news:    claude-sonnet-4-6     # lọc/tóm tắt tin
+narrative: claude-opus-4-8     # phân tích ④ (1 lần/run) — chất lượng
+commentary: claude-opus-4-8    # diễn giải dự báo + kịch bản
+max_tokens: 2000

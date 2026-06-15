@@ -1,0 +1,22 @@
+# Sổ tra tên-nguồn-trong-DB -> {label, url}. url null => "form nội bộ".
+"EIA RBRTE":        {label: "EIA (Brent RBRTE)", url: "https://www.eia.gov/opendata/"}
+"Vietcombank":      {label: "Vietcombank tỉ giá", url: "https://portal.vietcombank.com.vn/Personal/TG/Pages/ty-gia.aspx"}
+"UN Comtrade":      {label: "UN Comtrade", url: "https://comtradeplus.un.org/"}
+"ThePlasticsExchange": {label: "ThePlasticsExchange", url: "https://www.theplasticsexchange.com/"}
+"DCE delayed":      {label: "DCE (Đại Liên)", url: "https://www.dce.com.cn/DCE/Market/marketdata/index.html"}
+"ICE delayed":      {label: "ICE", url: "https://www.ice.com/products/219/Brent-Crude-Futures/data"}
+"CME":              {label: "CME Group", url: "https://www.cmegroup.com/markets/energy/crude-oil/light-sweet-crude.html"}
+"MPOB":             {label: "MPOB (dầu cọ)", url: "https://bepi.mpob.gov.my/index.php/en/"}
+"Polymerupdate-free": {label: "Polymerupdate (free)", url: "https://www.polymerupdate.com/"}
+"businessanalytiq": {label: "businessanalytiq", url: "https://www.businessanalytiq.com/procurementanalytics/index/"}
+"FRED":             {label: "FRED (St. Louis Fed)", url: "https://fred.stlouisfed.org/"}
+"MPOC palm oil":    {label: "MPOC (giá dầu cọ ngày)", url: "https://www.mpoc.org.my/market-insight/daily-palm-oil-prices/"}
+"Investing FCPO":   {label: "Investing.com FCPO (dầu cọ Bursa)", url: "https://www.investing.com/commodities/malaysian-crude-palm-oil-futures-historical-data"}
+"LME Zinc":         {label: "LME Zinc (kẽm, day-delayed)", url: "https://www.lme.com/en/Metals/Non-ferrous/LME-Zinc"}
+"SCI99":            {label: "SCI99 (hóa chất/nhựa TQ — cần đăng ký)", url: "https://intl.sci99.com/"}
+"IndexMundi palm oil": {label: "IndexMundi (dầu cọ tháng, free)", url: "https://www.indexmundi.com/commodities/?commodity=palm-oil&currency=myr"}
+"World Bank Pink Sheet": {label: "World Bank Pink Sheet", url: "https://www.worldbank.org/en/research/commodity-markets"}
+"blog (AI-extract)": {label: "Blog ngành (AI-extract)", url: null}
+"NCC A (form)":     {label: "Báo giá NCC A", url: null}
+"NCC S (form)":     {label: "Báo giá NCC S", url: null}
+"NCC T (form)":     {label: "Báo giá NCC T", url: null}

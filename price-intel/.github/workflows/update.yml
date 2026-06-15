@@ -1,0 +1,40 @@
+# Cập nhật theo yêu cầu: workflow_dispatch (chạy tay) + repo_dispatch (từ webhook Telegram).
+# LƯU Ý: file này kích hoạt khi thư mục price-intel/ là GỐC của repo riêng.
+name: update
+on:
+  workflow_dispatch:
+  workflow_call:
+  repo_dispatch:
+    types: [telegram-update]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -r requirements.txt
+      - name: Thu thập + phân tích + báo cáo + gửi Telegram (fail-soft)
+        env:
+          FIRECRAWL_KEY: ${{ secrets.FIRECRAWL_KEY }}
+          EIA_KEY: ${{ secrets.EIA_KEY }}
+          COMTRADE_KEY: ${{ secrets.COMTRADE_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
+        run: |
+          python fixtures/make_fixtures.py || true   # demo data nếu chưa có nguồn thật
+          python collect/free.py || true             # EIA Brent + Vietcombank USD/VND
+          python collect/daily.py || true            # nguồn cào (ưu tiên Firecrawl) -> AI extract
+          python collect/news.py || true             # tin tức (RSS + Firecrawl)
+          python db/load.py || true                  # QC staging -> price_master
+          python run_pipeline.py                     # analysis + HTML + DOCX + Telegram + dashboard
+      - uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: |
+            data/report.html
+            data/*.docx

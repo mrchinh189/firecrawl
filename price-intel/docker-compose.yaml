@@ -1,0 +1,20 @@
+# Self-host bằng Docker (tùy chọn — song song với GitHub Actions/Vercel).
+# pipeline: thu thập + phân tích + báo cáo + gửi Telegram theo lịch.
+# web: dashboard Next.js (đọc Supabase, hoặc mock khi chưa cấu hình).
+services:
+  pipeline:
+    build: .
+    image: price-intel-pipeline
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    # Đổi sang chạy 1 lần thủ công:  docker compose run --rm pipeline python run_pipeline.py
+
+  web:
+    build: ./web
+    image: price-intel-web
+    env_file: ./web/.env.local
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

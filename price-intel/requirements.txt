@@ -1,0 +1,17 @@
+requests
+python-dotenv
+beautifulsoup4
+lxml
+pandas
+plotly
+psycopg2-binary
+anthropic
+PyYAML
+statsmodels
+python-docx
+matplotlib
+kaleido
+openpyxl
+pytest
+# Tùy chọn (fallback cào khi Firecrawl lỗi). Cài thêm: pip install scrapling && scrapling install
+# scrapling

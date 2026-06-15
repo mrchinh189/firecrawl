@@ -1,0 +1,52 @@
+# Catalog nguồn thu thập. collector ưu tiên FIRECRAWL trước (theo yêu cầu),
+# fallback BS4/requests. Nguồn paywall (ICIS/Platts/Argus/ChemOrbis) KHÔNG cào.
+fetch:
+  prefer: firecrawl            # firecrawl | http  (ưu tiên Firecrawl trước)
+  delay_sec: 4                 # delay lịch sự giữa request
+  retry: 1
+
+# Tầng FREE (API/JSON — không cần Firecrawl). Đã kiểm chứng 2026-06.
+free:
+  - {name: "EIA RBRTE", kind: api, dataset: brent, freq: daily,
+     endpoint: "https://api.eia.gov/v2/petroleum/pri/spt/data/?facets[series][]=RBRTE", key: EIA_KEY}
+  - {name: "Vietcombank", kind: json, dataset: usdvnd, freq: daily,
+     endpoint: "https://www.vietcombank.com.vn/api/exchangerates?date=YYYY-MM-DD",
+     fallback: "https://vapi.vnappmob.com/api/v2/exchange_rate/vcb"}
+  - {name: "UN Comtrade", kind: api, dataset: unit_value_hs390102, freq: monthly, key: COMTRADE_KEY}
+
+# Tầng FIRECRAWL (HTML -> markdown -> AI extract). prefer=firecrawl ở trên.
+# Các trang sau ĐÃ KIỂM CHỨNG chặn HTTP thường (403) -> cần Firecrawl. URL cụ thể từng mã.
+firecrawl:
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/polypropylene-price-index/", product: [pp], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/polyethylene-price-index/", product: [pe, hdpe], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/propylene-price-index/", product: [propylene], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/stearic-acid-price-index/", product: [stearic], freq: monthly}
+  - {name: "businessanalytiq", url: "https://businessanalytiq.com/procurementanalytics/index/titanium-dioxide-tio2-china-price-index/", product: [tio2], freq: monthly}
+  - {name: "Polymerupdate-free", url: "https://polymerupdate.com/prices/sea/polymers/pp", product: [pp], freq: weekly}
+  - {name: "Polymerupdate-free", url: "https://polymerupdate.com/prices/sea/polymers/pe", product: [pe], freq: weekly}
+  - {name: "ThePlasticsExchange", url: "https://www.theplasticsexchange.com/", product: [pp, pe], freq: weekly}
+  - {name: "DCE delayed", url: "https://www.dce.com.cn/DCE/Market/marketdata/index.html", product: [pp], freq: daily}
+  # --- Nguồn driver oleochemical/kẽm (bạn cung cấp) — đều chặn HTTP thường, cần Firecrawl ---
+  - {name: "MPOC palm oil", url: "https://www.mpoc.org.my/market-insight/daily-palm-oil-prices/", product: [palm_oil], freq: daily}
+  - {name: "Investing FCPO", url: "https://www.investing.com/commodities/malaysian-crude-palm-oil-futures-historical-data", product: [palm_oil], freq: daily}
+  - {name: "LME Zinc", url: "https://www.lme.com/en/Metals/Non-ferrous/LME-Zinc", product: [lme_zinc], freq: daily}
+  # SCI99: giá hóa chất/nhựa/TiO2 TQ — CẦN ĐĂNG KÝ/TRẢ PHÍ; chỉ bóc phần free, fail-soft nếu login-gated
+  - {name: "SCI99", url: "https://intl.sci99.com/", product: [tio2, stearic], freq: weekly, needs_login: true}
+
+# Nguồn tin tức (chỉ tiêu đề + tóm tắt + link — KHÔNG full-text). Google News RSS không chặn.
+news:
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=polypropylene+price+CFR", category: resin}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=polyethylene+price+Asia", category: resin}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=TiO2+titanium+dioxide+price", category: additive}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=stearic+acid+palm+oil+price", category: additive}
+  - {name: "Google News RSS", rss: "https://news.google.com/rss/search?q=naphtha+Asia+price", category: feedstock}
+
+# Nguồn backfill lịch sử (3–5 năm) cho forecast tin cậy hơn
+history:
+  - {name: "EIA RBRTE", kind: api, series: brent_daily}
+  - {name: "FRED", kind: api, series: [PCU325211325211, PPOILUSDM, POILBREUSDM]}
+  - {name: "UN Comtrade", kind: api, series: unit_value_36m}
+  - {name: "World Bank Pink Sheet", kind: excel, series: cmo_monthly}
+
+# ⛔ KHÔNG cào (bản quyền/paywall) — nhập qua form:
+blocked: [ICIS, Platts, Argus, Fastmarkets, ChemOrbis, "Polymerupdate(paid)", WoodMackenzie]
