@@ -1,5 +1,15 @@
 # Hướng dẫn triển khai (Dự án A — GitHub Actions)
 
+## ⚡ Cách nhanh — `setup.sh`
+```bash
+bash setup.sh --check     # kiểm tra điều kiện (python/node/gh/psql)
+bash setup.sh             # guided: tạo .env, cài deps, test, sinh báo cáo, (tùy chọn) schema + GitHub secrets + Telegram webhook
+```
+Script hỏi xác nhận từng bước rủi ro; thiếu công cụ/khóa nào thì bỏ qua bước đó (không gãy).
+Hai việc thủ công còn lại: **tách `price-intel/` thành repo riêng** + **import `web/` vào Vercel**.
+
+---
+
 ## 1. Tách thành repo riêng
 Dự án này tự chứa trong thư mục `price-intel/`. Để dùng GitHub Actions cron, copy thư mục này
 thành **gốc của một repo mới** (vd `price-intel`), khi đó `.github/workflows/*.yml` mới kích hoạt.
